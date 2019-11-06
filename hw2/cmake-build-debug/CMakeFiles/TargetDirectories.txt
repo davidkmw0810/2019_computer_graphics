@@ -1,0 +1,2 @@
+C:/main/Github/2019_computer_graphics/hw2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/main/Github/2019_computer_graphics/hw2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

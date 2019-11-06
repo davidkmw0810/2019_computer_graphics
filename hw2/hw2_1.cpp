@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 GLsizei winWidth = 600, winHeight = 600;
 GLfloat xwcMin = 0.0, xwcMax = 225.0;
@@ -112,8 +113,99 @@ void triangle(wcPt2D* verts)
     glEnd();
 }
 
-void displayFcn()
+void setPixel(GLint xCoord, GLint yCorrd)
 {
+    glBegin(GL_POINTS);
+    glVertex2i(xCoord, yCorrd);
+    glEnd();
+}
+
+void circleMidpoint(GLint xc, GLint yc, GLint radius)
+{
+    screenPt circPt;
+    GLint p=1-radius;
+    circPt.setCoords(0, radius);
+    void circlePlotPoints(GLint, GLint, screenPt);
+    circlePlotPoints(xc, yc, circPt);
+    while(circPt.getx() < circPt.gety()){
+        circPt.incrementx();
+        if(p < 0)
+        {
+            p += 2*circPt.getx()+1;
+        }else
+        {
+            circPt.decrementy();
+            p += 2*(circPt.getx() - circPt.gety()) + 1;
+        }
+        circlePlotPoints(xc, yc, circPt);
+    }
+}
+
+void circlePlotPoints(GLint xc, GLint yc, screenPt circPt)
+{
+    setPixel(xc+circPt.getx(), yc+circPt.gety());
+    setPixel(xc-circPt.getx(), yc+circPt.gety());
+    setPixel(xc+circPt.getx(), yc-circPt.gety());
+    setPixel(xc-circPt.getx(), yc-circPt.gety());
+
+    setPixel(xc+circPt.gety(), yc+circPt.getx());
+    setPixel(xc-circPt.gety(), yc+circPt.getx());
+    setPixel(xc+circPt.gety(), yc-circPt.getx());
+    setPixel(xc-circPt.gety(), yc-circPt.getx());
+}
+
+void drawCircle(int x, int y, int radius, float r, float g, float b)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(r, g, b);
+    circleMidpoint(x, y, radius);
+    glFlush();
+}
+
+void displayFcn(int n)
+{
+
+    int n, shape;
+    scanf("%d\n", &n);
+
+    for(int i = 0; i < n; i++) {
+        float col_r, col_g, col_b;
+        shape = rand() % 4;
+        col_r = ((int)rand()%11)/10;
+        col_g = ((int)rand()%11)/10;
+        col_b = ((int)rand()%11)/10;
+        switch (shape) {
+            case 0: // circle
+                int r, piv_x, piv_y;
+
+                r = rand()%100 + 1;
+                piv_x = rand()%100 +50;
+                piv_y = rand()%100 +50;
+                drawCircle(piv_x, piv_y, r, col_r, col_g, col_b);
+                break;
+
+            case 1: // line
+                int x_1, x_2, y_1, y_2, thick;
+                float col_r, col_g, col_b;
+                x_1 = rand()%100;
+                x_2 = rand()%100;
+                y_1 = rand()%100;
+                y_2 = rand()%100;
+                thick = rand()%10 + 1;
+
+
+                break;
+
+            case 2: // triangle
+                break;
+
+            case 3: // square
+                break;
+
+            default:
+                exit(1);
+        }
+    }
     GLint nVerts=3;
     wcPt2D verts[3] = {{50.0, 25.0}, {150.0, 25.0}, {100.0, 100.0}};
 
@@ -165,6 +257,9 @@ void winReshapeFcn(GLint newWidth, GLint newHeight)
 
 int main(int argc, char** argv)
 {
+
+    srand(time(NULL));
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
     glutInitWindowPosition(50, 50);
@@ -172,7 +267,10 @@ int main(int argc, char** argv)
     glutCreateWindow("Geometric Transformation sequence");
 
     init();
+
+
     glutDisplayFunc(displayFcn);
+
     glutReshapeFunc(winReshapeFcn);
 
     glutMainLoop();
