@@ -47,10 +47,10 @@ RM = "C:\Program Files\JetBrains\CLion 2019.2.3\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\main\Github\2019_computer_graphics\hw2
+CMAKE_SOURCE_DIR = C:\main\Github\2019_computer_graphics\week6
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\main\Github\2019_computer_graphics\hw2\cmake-build-debug
+CMAKE_BINARY_DIR = C:\main\Github\2019_computer_graphics\week6\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\main\Github\2019_computer_graphics\hw2\cmake-build-debug\CMakeFiles C:\main\Github\2019_computer_graphics\hw2\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\main\Github\2019_computer_graphics\week6\cmake-build-debug\CMakeFiles C:\main\Github\2019_computer_graphics\week6\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\main\Github\2019_computer_graphics\hw2\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\main\Github\2019_computer_graphics\week6\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -109,14 +109,58 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles\Makefile.cmake 1
 .PHONY : depend
 
+#=============================================================================
+# Target rules for targets named week6
+
+# Build rule for target.
+week6: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 week6
+.PHONY : week6
+
+# fast build rule for target.
+week6/fast:
+	$(MAKE) -f CMakeFiles\week6.dir\build.make CMakeFiles/week6.dir/build
+.PHONY : week6/fast
+
+main.obj: main.c.obj
+
+.PHONY : main.obj
+
+# target to build an object file
+main.c.obj:
+	$(MAKE) -f CMakeFiles\week6.dir\build.make CMakeFiles/week6.dir/main.c.obj
+.PHONY : main.c.obj
+
+main.i: main.c.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.c.i:
+	$(MAKE) -f CMakeFiles\week6.dir\build.make CMakeFiles/week6.dir/main.c.i
+.PHONY : main.c.i
+
+main.s: main.c.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.c.s:
+	$(MAKE) -f CMakeFiles\week6.dir\build.make CMakeFiles/week6.dir/main.c.s
+.PHONY : main.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
+	@echo ... week6
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... main.obj
+	@echo ... main.i
+	@echo ... main.s
 .PHONY : help
 
 

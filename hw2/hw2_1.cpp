@@ -1,279 +1,157 @@
 #include <GL/glut.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <time.h>
 
 GLsizei winWidth = 600, winHeight = 600;
-GLfloat xwcMin = 0.0, xwcMax = 225.0;
-GLfloat ywcMin = 0.0, ywcMax = 225.0;
-
-class wcPt2D
-{
-public:
-    GLfloat x,y;
-};
 
 typedef GLfloat Matrix3x3[3][3];
 Matrix3x3 matComposite;
 const GLdouble pi = 3.14159;
+GLint n;
 
-void init(void)
-{
-    glClearColor(1.0, 1.0, 1.0, 0.0);
+void init(){
+    glClearColor(0, 0, 0, 1);
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0, winWidth, 0, winHeight);
 }
 
-void matrix3x3SetIdentity(Matrix3x3 matIdent3x3)
-{
-    GLint row, col;
-    for(row=0; row<3; row++)
-    {
-        for(col=0; col<3; col++)
-            matIdent3x3[row][col] = (row==col);
+void drawCircle(GLint x, GLint y, GLint r, GLint thick, Color col){
+
+    GLint fill = rand()%2;
+    glColor3f(col.r, col.g, col.b);
+
+    if(fill == 1)
+        glBegin(GL_POLYGON); // fill
+    else
+        glBegin(GL_LINE_LOOP); // empty
+
+    for(GLint i = 0; i < 360; i++){
+        GLfloat theta = i*pi / 180;
+        GLfloat cx = r*cos(theta);
+        GLfloat cy = r*sin(theta);
+        glVertex2f(x + cx, y + cy);
     }
+    glEnd();
 }
 
-void matrix3x3PreMultiply(Matrix3x3 m1, Matrix3x3 m2)
-{
-    GLint row,col;
-    Matrix3x3 matTemp;
-
-    for(row=0; row<3; row++)
-    {
-        for(col=0; col<3; col++)
-        {
-            matTemp[row][col] = m1[row][0] * m2[0][col] + m1[row][1] * m2[1][col] + m1[row][2] * m2[2][col];
-        }
-    }
-
-    for(row=0; row<3; row++)
-    {
-        for(col=0; col<3; col++)
-            m2[row][col] = matTemp[row][col];
-    }
+void drawLine(GLint x1, GLint y1, GLint x2, GLint y2, GLint thick, Color col){
+    glColor3f(col.r, col.g, col.b);
+    glBegin(GL_LINE_STRIP);
+    glLineWidth(thick);
+    glVertex2i(x1, y1);
+    glVertex2i(x2, y2);
+    glEnd();
 }
 
-void translate2D(GLfloat tx, GLfloat ty)
-{
-    Matrix3x3 matTransl;
-    matrix3x3SetIdentity(matTransl);
+void drawTriangle(GLint x, GLint y, GLint l, GLint thick, Color col){
 
-    matTransl[0][2] = tx;
-    matTransl[1][2] = ty;
+    GLint fill = rand()%2;
+    glColor3f(col.r, col.g, col.b);
 
-    matrix3x3PreMultiply(matTransl, matComposite);
-}
+    if(fill == 1)
+        glBegin(GL_POLYGON); // fill
+    else
+        glBegin(GL_LINE_LOOP); // empty
 
-void rotate2D(wcPt2D pivotPt, GLfloat theta)
-{
-    Matrix3x3 matRot;
-    matrix3x3SetIdentity(matRot);
-
-    matRot[0][0] = cos(theta);
-    matRot[0][1] = -sin(theta);
-    matRot[0][2] = pivotPt.x*(1- cos(theta))+pivotPt.y*sin(theta);
-    matRot[1][0] = sin(theta);
-    matRot[1][1] = cos(theta);
-    matRot[1][2] = pivotPt.y*(1-cos(theta))-pivotPt.x*sin(theta);
-
-    matrix3x3PreMultiply(matRot, matComposite);
-}
-
-void scale2D(GLfloat sx, GLfloat sy, wcPt2D fixedPt)
-{
-    Matrix3x3 matScale;
-    matrix3x3SetIdentity(matScale);
-
-    matScale[0][0] = sx;
-    matScale[0][2] = (1-sx)*fixedPt.x;
-    matScale[1][1] = sy;
-    matScale[1][2] = (1-sy)*fixedPt.y;
-
-    matrix3x3PreMultiply(matScale, matComposite);
-}
-
-void transformVerts2D(GLint nVerts, wcPt2D* verts)
-{
-    GLint k;
-    GLfloat temp;
-
-    for(k=0; k<nVerts; k++)
-    {
-        temp = matComposite[0][0]*verts[k].x + matComposite[0][1]*verts[k].y+matComposite[0][2];
-        verts[k].y = matComposite[1][0]*verts[k].x+matComposite[1][1]*verts[k].y+matComposite[1][2];
-        verts[k].x = temp;
-    }
-}
-
-void triangle(wcPt2D* verts)
-{
-    GLint k;
     glBegin(GL_TRIANGLES);
-    for(k=0;k<3;k++)
-        glVertex2f(verts[k].x, verts[k].y);
+    glVertex2f(x, y + l); // 0
+    glVertex2f(x - l*1.73205, y - l/2); // 120
+    glVertex2f(x + l*1.73205, y - l/2); // 240
+
     glEnd();
 }
 
-void setPixel(GLint xCoord, GLint yCorrd)
-{
-    glBegin(GL_POINTS);
-    glVertex2i(xCoord, yCorrd);
+void drawSquare(GLint x, GLint y, GLint l, GLint thick, Color col){
+
+    GLint fill = rand()%2;
+
+    glColor3f(col.r, col.g, col.b);
+
+    if(fill == 1)
+        glBegin(GL_POLYGON); // fill
+    else
+        glBegin(GL_LINE_LOOP); // empty
+
+    glBegin(GL_QUADS);
+    glVertex2f(x - l/2, y + l/2);
+    glVertex2f(x + l/2, y + l/2);
+    glVertex2f(x + l/2, y - l/2);
+    glVertex2f(x - l/2, y - l/2);
+
     glEnd();
 }
 
-void circleMidpoint(GLint xc, GLint yc, GLint radius)
-{
-    screenPt circPt;
-    GLint p=1-radius;
-    circPt.setCoords(0, radius);
-    void circlePlotPoints(GLint, GLint, screenPt);
-    circlePlotPoints(xc, yc, circPt);
-    while(circPt.getx() < circPt.gety()){
-        circPt.incrementx();
-        if(p < 0)
-        {
-            p += 2*circPt.getx()+1;
-        }else
-        {
-            circPt.decrementy();
-            p += 2*(circPt.getx() - circPt.gety()) + 1;
-        }
-        circlePlotPoints(xc, yc, circPt);
-    }
-}
+void randomDisp(){
 
-void circlePlotPoints(GLint xc, GLint yc, screenPt circPt)
-{
-    setPixel(xc+circPt.getx(), yc+circPt.gety());
-    setPixel(xc-circPt.getx(), yc+circPt.gety());
-    setPixel(xc+circPt.getx(), yc-circPt.gety());
-    setPixel(xc-circPt.getx(), yc-circPt.gety());
-
-    setPixel(xc+circPt.gety(), yc+circPt.getx());
-    setPixel(xc-circPt.gety(), yc+circPt.getx());
-    setPixel(xc+circPt.gety(), yc-circPt.getx());
-    setPixel(xc-circPt.gety(), yc-circPt.getx());
-}
-
-void drawCircle(int x, int y, int radius, float r, float g, float b)
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(r, g, b);
-    circleMidpoint(x, y, radius);
-    glFlush();
-}
-
-void displayFcn(int n)
-{
-
-    int n, shape;
-    scanf("%d\n", &n);
+    GLint x, x1, x2, y, y1, y2, r, l, thick, shape;
+    Color col;
 
     for(int i = 0; i < n; i++) {
-        float col_r, col_g, col_b;
         shape = rand() % 4;
-        col_r = ((int)rand()%11)/10;
-        col_g = ((int)rand()%11)/10;
-        col_b = ((int)rand()%11)/10;
+        col.r = ((int)rand()%11 + 1)/10;
+        col.g = ((int)rand()%11 + 1)/10;
+        col.b = ((int)rand()%11 + 1)/10;
+        thick = rand()%50 +1;
         switch (shape) {
             case 0: // circle
-                int r, piv_x, piv_y;
-
-                r = rand()%100 + 1;
-                piv_x = rand()%100 +50;
-                piv_y = rand()%100 +50;
-                drawCircle(piv_x, piv_y, r, col_r, col_g, col_b);
+                printf("%d is circle\n", i+1);
+                r = rand()%300 + 1;
+                x = rand()%300 +50;
+                y = rand()%300 +50;
+                drawCircle(x, y, r, thick, col);
                 break;
 
             case 1: // line
-                int x_1, x_2, y_1, y_2, thick;
-                float col_r, col_g, col_b;
-                x_1 = rand()%100;
-                x_2 = rand()%100;
-                y_1 = rand()%100;
-                y_2 = rand()%100;
-                thick = rand()%10 + 1;
-
-
+                printf("%d is line\n", i+1);
+                x1 = rand()%300;
+                x2 = rand()%300;
+                y1 = rand()%300;
+                y2 = rand()%300;
+                drawLine(x1, y1, x2, y2, thick, col);
                 break;
 
             case 2: // triangle
+                printf("%d is triangle\n", i+1);
+                x = rand()%300;
+                y = rand()%300;
+                l = rand()%300;
+                drawTriangle(x, y, l, thick, col);
                 break;
 
             case 3: // square
+                printf("%d is square\n", i+1);
+                x = rand()%300;
+                y = rand()%300;
+                l = rand()%300;
+                drawSquare(x, y, l, thick, col);
                 break;
 
             default:
                 exit(1);
+                break;
         }
     }
-    GLint nVerts=3;
-    wcPt2D verts[3] = {{50.0, 25.0}, {150.0, 25.0}, {100.0, 100.0}};
-
-    wcPt2D centroidPt;
-
-    GLint k, xSum=0, ySum=0;
-    for(k=0;k<nVerts;k++)
-    {
-        xSum+=verts[k].x;
-        ySum+=verts[k].y;
-    }
-    centroidPt.x = GLfloat(xSum)/GLfloat(nVerts);
-    centroidPt.y = GLfloat(ySum)/GLfloat(nVerts);
-
-    wcPt2D pivPt, fixedPt;
-    pivPt = centroidPt;
-    fixedPt = centroidPt;
-
-    GLfloat tx = 0.0, ty = 100.0;
-    GLfloat sx = 0.5, sy = 0.5;
-    GLdouble theta = pi/2.0;
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.0, 0.0, 1.0);
-    triangle(verts);
-
-    matrix3x3SetIdentity(matComposite);
-
-    scale2D(sx, sy, fixedPt);
-    rotate2D(pivPt, theta);
-    translate2D(tx, ty);
-
-    transformVerts2D(nVerts, verts);
-
-    glColor3f(1.0, 0.0, 0.0);
-    triangle(verts);
     glFlush();
-}
-
-void winReshapeFcn(GLint newWidth, GLint newHeight)
-{
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(xwcMin, xwcMax, ywcMin, ywcMax);
-
-    glClear(GL_COLOR_BUFFER_BIT);
+    exit(1);
 }
 
 int main(int argc, char** argv)
 {
 
     srand(time(NULL));
+    scanf("%d", &n);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
-    glutInitWindowPosition(50, 50);
+    glutInitWindowPosition(100, 100);
     glutInitWindowSize(winWidth, winHeight);
-    glutCreateWindow("Geometric Transformation sequence");
-
+    glutCreateWindow("hw2_1");
     init();
 
-
-    glutDisplayFunc(displayFcn);
-
-    glutReshapeFunc(winReshapeFcn);
+    glutDisplayFunc(randomDisp);
 
     glutMainLoop();
     return 0;
 }
-

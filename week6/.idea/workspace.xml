@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="week6" targetName="week6" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -9,7 +11,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f37a779-3802-48d1-96ef-d31488a183c8" name="Default Changelist" comment="" />
+    <list default="true" id="3ba903f7-45a5-4734-93cb-d6188c565ed0" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,21 +21,14 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="CMakeLists.txt" />
-      </list>
-    </option>
-  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1TFNuxZtqKaHJqXT3Y66z9i4FG8" />
+  <component name="ProjectId" id="1TJmJPQpH6my4epq5nFByJw6yPZ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -53,20 +48,25 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="week6" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="week6" TARGET_NAME="week6" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="week6" RUN_TARGET_NAME="week6">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4f37a779-3802-48d1-96ef-d31488a183c8" name="Default Changelist" comment="" />
-      <created>1573052109582</created>
+      <changelist id="3ba903f7-45a5-4734-93cb-d6188c565ed0" name="Default Changelist" comment="" />
+      <created>1573186500014</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1573052109582</updated>
-      <workItem from="1573052110678" duration="2105000" />
-      <workItem from="1573054229043" duration="3000" />
-      <workItem from="1573124911466" duration="16941000" />
-      <workItem from="1573186430603" duration="39000" />
+      <updated>1573186500014</updated>
+      <workItem from="1573186501307" duration="5483000" />
+      <workItem from="1573217157719" duration="24000" />
     </task>
     <servers />
   </component>
